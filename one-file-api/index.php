@@ -6,14 +6,9 @@ header("Access-Control-Allow-Headers: *");
 header("Access-Control-Allow-Methods: *");
 
 class DbConnect {
-    private $server = 'localhost';
-    private $dbname = 'react_js';
-    private $user = 'root';
-    private $pass = '';
-
     public function connect() {
         try {
-            $conn = new PDO('mysql:host=' .$this->server .';dbname=' . $this->dbname, $this->user, $this->pass);
+            $conn = new PDO('sqlite:app.db');
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $conn;
         } catch (\Exception $e) {
