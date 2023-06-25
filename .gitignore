@@ -1,0 +1,4 @@
+/vendor
+/app.db
+/*.sql
+!/database.sql

@@ -1,0 +1,15 @@
+{
+    "name": "fadil/hfx",
+    "description": "Micro app - one file API",
+    "authors": [
+        {
+            "name": "fadilxcoder",
+            "email": "fadil@xcoder.dvlpr"
+        }
+    ],
+    "require": {
+        "ramsey/uuid": "^4.7"
+    },
+    "repositories": [
+    ]    
+}
