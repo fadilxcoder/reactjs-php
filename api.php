@@ -67,7 +67,7 @@ switch($method) {
  */
 function getUsers(): array {
     global $conn;
-    $sql = "SELECT * FROM users";
+    $sql = "SELECT * FROM users WHERE deleted_at IS NULL";
     $path = explode('/', $_SERVER['REQUEST_URI']);
 
     if (
@@ -75,7 +75,7 @@ function getUsers(): array {
         && is_numeric($path[3])
     ) {
         # By id
-        $sql .= " WHERE id = :id";
+        $sql .= " AND id = :id";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':id', $path[3]);
         $stmt->execute();
@@ -101,7 +101,9 @@ function insertUser(): array {
     global $conn;
     $user = json_decode(file_get_contents('php://input'));
 
-    $sql = "INSERT INTO users(id, name, email, phone, token, created_at) VALUES(null, :name, :email, :phone, :token, :created_at) RETURNING *";
+    # The RETURNING syntax has been supported by SQLite since version 3.35.0
+    # $sql = "INSERT INTO users(id, name, email, phone, token, created_at) VALUES(null, :name, :email, :phone, :token, :created_at) RETURNING *";
+    $sql = "INSERT INTO users(id, name, email, phone, token, created_at) VALUES(null, :name, :email, :phone, :token, :created_at)";
 
     $token = Uuid::uuid7()->__toString();
     $date = date('Y-m-d');
@@ -114,6 +116,10 @@ function insertUser(): array {
     $stmt->bindParam(':created_at', $date);
 
     if ($stmt->execute()) {
+        $sql = "SELECT * FROM users WHERE id = (SELECT last_insert_rowid()) ";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+
         $response = [
             'status' => 201, 
             'statusText' => 'Record created successfully.',
@@ -137,7 +143,9 @@ function updateUser(): array {
     global $conn;
     $user = json_decode( file_get_contents('php://input') );
 
-    $sql = "UPDATE users SET name= :name, email =:email, phone =:phone, updated_at =:updated_at WHERE id = :id RETURNING *";
+    # The RETURNING syntax has been supported by SQLite since version 3.35.0
+    # $sql = "UPDATE users SET name= :name, email =:email, phone =:phone, updated_at =:updated_at WHERE id = :id RETURNING *";
+    $sql = "UPDATE users SET name= :name, email =:email, phone =:phone, updated_at =:updated_at WHERE id = :id";
 
     $updated_at = date('Y-m-d');
 
@@ -149,6 +157,11 @@ function updateUser(): array {
     $stmt->bindParam(':updated_at', $updated_at);
 
     if ($stmt->execute()) {
+        $sql = "SELECT * FROM users WHERE id = :id";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':id', $user->id);
+        $stmt->execute();
+
         $response = [
             'status' => 200, 
             'statusText' => 'Record updated successfully.',
@@ -170,11 +183,20 @@ function updateUser(): array {
  */
 function deleteUser(): array {
     global $conn;
-    $sql = "DELETE FROM users WHERE id = :id";
-    $path = explode('/', $_SERVER['REQUEST_URI']);
 
+    # Hard delete
+    # $sql = "DELETE FROM users WHERE id = :id";
+
+    # Soft delete
+
+    $sql = "UPDATE users SET deleted_at =:deleted_at WHERE id = :id";
+    $path = explode('/', $_SERVER['REQUEST_URI']);
+    $deleted_at = date('Y-m-d');
+
+    
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':id', $path[3]);
+    $stmt->bindParam(':deleted_at', $deleted_at);
 
     if ($stmt->execute()) {
         $response = [

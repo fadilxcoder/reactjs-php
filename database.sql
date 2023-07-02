@@ -8,5 +8,6 @@ CREATE TABLE IF NOT EXISTS `users` (
     `phone` BIGINT(10),
     `token` VARCHAR(100),
     `created_at` TIMESTAMP,
-    `updated_at` TIMESTAMP
+    `updated_at` TIMESTAMP,
+    `deleted_at` TIMESTAMP
 );
