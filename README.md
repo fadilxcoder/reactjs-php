@@ -5,8 +5,9 @@ One file API with CRUD / SQLite
 * Create database : `touch app.db` 
 
 
-* BASE URL : `http://localhost/sqlite-api/`
+* BASE URL : `http://localhost/sqlite-api/`  
 
+* Virtual host : `http://users.php.sqlite.app.local/api`
 
 * HTTP response status codes : https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
 

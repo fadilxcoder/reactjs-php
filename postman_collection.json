@@ -12,13 +12,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost/sqlite-api/",
-					"protocol": "http",
+					"raw": "{{URL}}/api/",
 					"host": [
-						"localhost"
+						"{{URL}}"
 					],
 					"path": [
-						"sqlite-api",
+						"api",
 						""
 					]
 				}
@@ -31,20 +30,18 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost/sqlite-api/index/:id",
-					"protocol": "http",
+					"raw": "{{URL}}/api/:id",
 					"host": [
-						"localhost"
+						"{{URL}}"
 					],
 					"path": [
-						"sqlite-api",
-						"index",
+						"api",
 						":id"
 					],
 					"variable": [
 						{
 							"key": "id",
-							"value": "1"
+							"value": "5"
 						}
 					]
 				}
@@ -66,13 +63,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/sqlite-api/",
-					"protocol": "http",
+					"raw": "{{URL}}/api/",
 					"host": [
-						"localhost"
+						"{{URL}}"
 					],
 					"path": [
-						"sqlite-api",
+						"api",
 						""
 					]
 				}
@@ -83,10 +79,16 @@
 			"name": "users",
 			"request": {
 				"method": "PUT",
-				"header": [],
+				"header": [
+					{
+						"key": "Keep-Alive",
+						"value": "true",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\" : \"{{$randomFullName}}\",\r\n    \"email\" : \"{{$randomEmail}}\",\r\n    \"phone\" : \"{{$randomPhoneNumber}}\",\r\n    \"id\" : 1\r\n}",
+					"raw": "{\r\n    \"name\" : \"{{$randomFullName}}\",\r\n    \"email\" : \"{{$randomEmail}}\",\r\n    \"phone\" : \"{{$randomPhoneNumber}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -94,14 +96,19 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/sqlite-api/",
-					"protocol": "http",
+					"raw": "{{URL}}/api/:id",
 					"host": [
-						"localhost"
+						"{{URL}}"
 					],
 					"path": [
-						"sqlite-api",
-						""
+						"api",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "5"
+						}
 					]
 				}
 			},
@@ -122,14 +129,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/sqlite-api/index/:id",
-					"protocol": "http",
+					"raw": "{{URL}}/api/:id",
 					"host": [
-						"localhost"
+						"{{URL}}"
 					],
 					"path": [
-						"sqlite-api",
-						"index",
+						"api",
 						":id"
 					],
 					"variable": [
@@ -141,6 +146,33 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "URL",
+			"value": "http://localhost/sqlite-api",
+			"type": "string"
 		}
 	]
 }

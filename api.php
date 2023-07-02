@@ -71,13 +71,13 @@ function getUsers(): array {
     $path = explode('/', $_SERVER['REQUEST_URI']);
 
     if (
-        isset($path[3]) 
-        && is_numeric($path[3])
+        isset($path[2]) 
+        && is_numeric($path[2])
     ) {
         # By id
         $sql .= " AND id = :id";
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':id', $path[3]);
+        $stmt->bindParam(':id', $path[2]);
         $stmt->execute();
         $users = $stmt->fetch(PDO::FETCH_ASSOC);
     } else {
@@ -146,11 +146,11 @@ function updateUser(): array {
     # The RETURNING syntax has been supported by SQLite since version 3.35.0
     # $sql = "UPDATE users SET name= :name, email =:email, phone =:phone, updated_at =:updated_at WHERE id = :id RETURNING *";
     $sql = "UPDATE users SET name= :name, email =:email, phone =:phone, updated_at =:updated_at WHERE id = :id";
-
+    $path = explode('/', $_SERVER['REQUEST_URI']);
     $updated_at = date('Y-m-d');
 
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':id', $user->id);
+    $stmt->bindParam(':id', $path[2]);
     $stmt->bindParam(':name', $user->name);
     $stmt->bindParam(':email', $user->email);
     $stmt->bindParam(':phone', $user->phone);
@@ -159,7 +159,7 @@ function updateUser(): array {
     if ($stmt->execute()) {
         $sql = "SELECT * FROM users WHERE id = :id";
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':id', $user->id);
+        $stmt->bindParam(':id', $path[2]);
         $stmt->execute();
 
         $response = [
@@ -188,14 +188,13 @@ function deleteUser(): array {
     # $sql = "DELETE FROM users WHERE id = :id";
 
     # Soft delete
-
     $sql = "UPDATE users SET deleted_at =:deleted_at WHERE id = :id";
     $path = explode('/', $_SERVER['REQUEST_URI']);
     $deleted_at = date('Y-m-d');
 
     
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':id', $path[3]);
+    $stmt->bindParam(':id', $path[2]);
     $stmt->bindParam(':deleted_at', $deleted_at);
 
     if ($stmt->execute()) {
