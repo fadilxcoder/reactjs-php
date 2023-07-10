@@ -55,7 +55,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\" : \"{{$randomFullName}}\",\r\n    \"email\" : \"{{$randomEmail}}\",\r\n    \"phone\" : \"{{$randomPhoneNumber}}\"\r\n}",
+					"raw": "{\r\n    \"name\" : \"{{$randomFullName}}\",\r\n    \"email\" : \"{{$randomEmail}}\",\r\n    \"phone\" : \"{{$randomPhoneNumber}}\",\r\n    \"password\" : \"{{$randomPassword}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -140,7 +140,7 @@
 					"variable": [
 						{
 							"key": "id",
-							"value": "1"
+							"value": "5"
 						}
 					]
 				}
@@ -171,7 +171,7 @@
 	"variable": [
 		{
 			"key": "URL",
-			"value": "http://localhost/sqlite-api",
+			"value": "users.php.sqlite.app.local",
 			"type": "string"
 		}
 	]

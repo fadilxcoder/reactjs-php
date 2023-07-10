@@ -103,7 +103,7 @@ function insertUser(): array {
 
     # The RETURNING syntax has been supported by SQLite since version 3.35.0
     # $sql = "INSERT INTO users(id, name, email, phone, token, created_at) VALUES(null, :name, :email, :phone, :token, :created_at) RETURNING *";
-    $sql = "INSERT INTO users(id, name, email, phone, token, created_at) VALUES(null, :name, :email, :phone, :token, :created_at)";
+    $sql = "INSERT INTO users(id, name, email, phone, password, token, created_at) VALUES(null, :name, :email, :phone, :password, :token, :created_at)";
 
     $token = Uuid::uuid7()->__toString();
     $date = date('Y-m-d');
@@ -113,6 +113,7 @@ function insertUser(): array {
     $stmt->bindParam(':email', $user->email);
     $stmt->bindParam(':phone', $user->phone);
     $stmt->bindParam(':token', $token);
+    $stmt->bindParam(':password', $user->password);
     $stmt->bindParam(':created_at', $date);
 
     if ($stmt->execute()) {
